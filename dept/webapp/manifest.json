@@ -1,0 +1,191 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "dept",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.13.2",
+      "toolsId": "85815293-0077-4c83-a2b9-5efefa77e0b2"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/department/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      },
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.126.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ushell": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "dept.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "departmentList",
+          "target": "departmentList"
+        },
+        {
+          "pattern": "department({key}):?query:",
+          "name": "departmentObjectPage",
+          "target": "departmentObjectPage"
+        },
+        {
+          "pattern": "department({key})/emp({key2}):?query:",
+          "name": "employeeObjectPage",
+          "target": "employeeObjectPage"
+        }
+      ],
+      "targets": {
+        "departmentList": {
+          "type": "Component",
+          "id": "departmentList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/department",
+              "variantManagement": "Page",
+              "navigation": {
+                "department": {
+                  "detail": {
+                    "route": "departmentObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "departmentObjectPage": {
+          "type": "Component",
+          "id": "departmentObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/department",
+              "entitySet": "department",
+              "navigation": {
+                "emp": {
+                  "detail": {
+                    "route": "employeeObjectPage"
+                  }
+                }
+              },
+              "content": {
+                "header": {
+                  "actions": {
+                    "spreadsheetUpload": {
+                      "id": "spreadsheetUploadButton",
+                      "text": "excel upload",
+                      "enabled": "{ui>/isEditable}",
+                      "press": "dept.ext.ObjectPageExtController.openSpreadsheetUploadDialog",
+                      "requiresSelection": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "employeeObjectPage": {
+          "type": "Component",
+          "id": "employeeObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/department/emp"
+            }
+          }
+        }
+      }
+    },
+    "resourceRoots": {
+      "cc.spreadsheetimporter.v1_1_1": "./thirdparty/customcontrol/spreadsheetimporter/v1_1_1"
+    },
+    "componentUsages": {
+      "spreadsheetImporter": {
+        "name": "cc.spreadsheetimporter.v1_1_1"
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}
